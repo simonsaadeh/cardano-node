@@ -1,11 +1,14 @@
+{-# LANGUAGE DerivingStrategies    #-}
 {-# LANGUAGE FlexibleContexts      #-}
 {-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NamedFieldPuns        #-}
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE UndecidableInstances  #-}
+{-# LANGUAGE StandaloneDeriving    #-}
 {-# LANGUAGE TypeOperators         #-}
 {-# LANGUAGE TypeApplications      #-}
 
@@ -14,11 +17,16 @@
 module Cardano.TracingOrphanInstances.HardFork () where
 
 import           Prelude
+import           Cardano.Prelude (panic, readMaybe)
 
+import           Data.Aeson
+import           Data.Scientific (coefficient)
 import           Data.SOP.Strict
+import qualified Data.Text as Text
+import           Network.Socket (PortNumber)
 
-import           Cardano.Config.Orphanage ()
 import qualified Cardano.Crypto.Hash.Class as Crypto
+import           Cardano.Slotting.Block (BlockNo (..))
 import           Cardano.TracingOrphanInstances.Common
 import           Cardano.TracingOrphanInstances.Consensus ()
 
@@ -38,6 +46,7 @@ import           Ouroboros.Consensus.HardFork.Combinator.AcrossEras
 import           Ouroboros.Consensus.TypeFamilyWrappers
 
 import           Ouroboros.Consensus.Util.Condense (Condense(..))
+import           Ouroboros.Network.Block (HeaderHash, Tip (..))
 
 
 --
@@ -232,3 +241,23 @@ instance ToObject (ChainIndepState (BlockProtocol blk))
       => ToObject (WrapChainIndepState blk) where
     toObject verb = toObject verb . unwrapChainIndepState
 
+instance FromJSON PortNumber where
+  parseJSON (Number portNum) = case readMaybe . show $ coefficient portNum of
+                                 Just port -> pure port
+                                 Nothing -> panic $ (Text.pack $ show portNum)
+                                                  <> " is not a valid port number."
+  parseJSON invalid  = panic $ "Parsing of port number failed due to type mismatch. "
+                             <> "Encountered: " <> (Text.pack $ Prelude.show invalid)
+
+-- Duplicated in cardano-cli
+
+instance ToJSON (HeaderHash blk) => ToJSON (Tip blk) where
+  toJSON TipGenesis = object [ "genesis" .= True ]
+  toJSON (Tip slotNo headerHash blockNo) =
+    object
+      [ "slotNo"     .= slotNo
+      , "headerHash" .= headerHash
+      , "blockNo"    .= blockNo
+      ]
+
+deriving newtype instance ToJSON BlockNo

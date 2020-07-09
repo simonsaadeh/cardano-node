@@ -6,6 +6,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE StandaloneDeriving #-}
+{-# LANGUAGE UndecidableInstances  #-}
 
 {-# OPTIONS_GHC -Wno-orphans #-}
 
@@ -13,8 +14,7 @@ module Cardano.CLI.Shelley.Orphans () where
 
 import           Cardano.Prelude
 
-import           Data.Aeson (ToJSON (..), ToJSONKey (..),
-                   ToJSONKeyFunction (..), (.=))
+import           Data.Aeson
 import qualified Data.Aeson as Aeson
 import qualified Data.Aeson.Encoding as Aeson
 import qualified Data.Text as Text
@@ -25,6 +25,7 @@ import           Cardano.TracingOrphanInstances.Common ()
 
 import           Ouroboros.Consensus.Shelley.Protocol.Crypto (TPraosStandardCrypto)
 import           Ouroboros.Consensus.Shelley.Ledger.Block (ShelleyHash(..))
+import           Ouroboros.Network.Block (BlockNo(..), HeaderHash, Tip (..))
 
 import           Shelley.Spec.Ledger.BaseTypes (StrictMaybe)
 import           Shelley.Spec.Ledger.BlockChain (HashHeader(..))
@@ -62,6 +63,18 @@ instance Crypto c => ToJSON (TxOut c) where
       , "amount" .= amount
       ]
 
+-- duplicated in cardano-config
+instance ToJSON (HeaderHash blk) => ToJSON (Tip blk) where
+  toJSON TipGenesis = object [ "genesis" .= True ]
+  toJSON (Tip slotNo headerHash blockNo) =
+    object
+      [ "slotNo"     .= slotNo
+      , "headerHash" .= headerHash
+      , "blockNo"    .= blockNo
+      ]
+
+-- duplicated in cardano-config
+deriving newtype instance ToJSON BlockNo
 
 --
 -- Simple newtype wrappers JSON conversion
