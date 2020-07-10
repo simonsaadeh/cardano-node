@@ -6,40 +6,30 @@ module Test.CLI.TextEnvelope.Golden.Genesis.Create
 
 import Cardano.Prelude hiding (to)
 
-import Data.Maybe
-  ( fromJust
-  )
-import Control.Lens
-  ( (^?)
-  , (^..)
-  , each
-  )
+import Data.Maybe (fromJust)
+import Control.Lens ((^?), (^..), each)
 import Prelude(String) 
 
-import qualified Control.Lens         as CL
-import qualified Data.Aeson           as J
-import qualified Data.Aeson.Lens      as J
-import qualified Data.HashMap.Strict  as HMS
-import qualified Data.List            as L
-import qualified Data.Set             as S
-import qualified Data.Text            as T
-import qualified Data.Time.Clock      as DT
-import qualified Data.Time.Format     as DT
-import qualified Data.Vector          as DV
-import qualified System.Directory     as IO
-import qualified System.IO            as IO
-import qualified System.IO.Temp       as IO
+import qualified Control.Lens as CL
+import qualified Data.Aeson as J
+import qualified Data.Aeson.Lens as J
+import qualified Data.HashMap.Strict as HMS
+import qualified Data.List as L
+import qualified Data.Set as S
+import qualified Data.Text as T
+import qualified Data.Time.Clock as DT
+import qualified Data.Time.Format as DT
+import qualified Data.Vector as DV
+import qualified System.Directory as IO
+import qualified System.IO as IO
+import qualified System.IO.Temp as IO
 
-import Hedgehog
-  ( Property
-  , forAll
-  , (===)
-  )
+import Hedgehog (Property, forAll, (===))
 
-import qualified Hedgehog       as H
-import qualified Hedgehog.Gen   as G
+import qualified Hedgehog as H
+import qualified Hedgehog.Gen as G
 import qualified Hedgehog.Range as R
-import qualified Test.OptParse  as OP
+import qualified Test.OptParse as OP
 
 {- HLINT ignore "Use camelCase" -}
 
