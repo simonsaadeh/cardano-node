@@ -6,7 +6,6 @@ module Test.CLI.TextEnvelope.Golden.Genesis.Create
 
 import Cardano.Prelude hiding (to)
 
-import Data.Maybe (fromJust)
 import Control.Lens ((^?), (^..), each)
 import Prelude(String) 
 
@@ -27,6 +26,7 @@ import qualified System.IO.Temp as IO
 import Hedgehog (Property, forAll, (===))
 
 import qualified Hedgehog as H
+import qualified Hedgehog.Internal.Property as H
 import qualified Hedgehog.Gen as G
 import qualified Hedgehog.Range as R
 import qualified Test.OptParse as OP
@@ -55,6 +55,13 @@ formatIso8601 = DT.formatTime DT.defaultTimeLocale (DT.iso8601DateFormat (Just "
 -- | Return the supply value with the result of the supplied function as a tuple
 withSnd :: (a -> b) -> a -> (a, b)
 withSnd f a = (a, f a)
+
+justResult :: (Show a, HasCallStack) => Maybe a -> H.PropertyT IO a
+justResult (Just a) = H.forAll $ pure a
+justResult Nothing = H.failWith Nothing "Expecting Just, got nothing"
+
+result :: Show a => a -> H.PropertyT IO a
+result a = H.forAll $ pure a
 
 golden_genesisCreate :: Property
 golden_genesisCreate = OP.propertyOnce $ do
@@ -87,11 +94,11 @@ golden_genesisCreate = OP.propertyOnce $ do
 
   H.annotate genesisContents
 
-  actualSupply        <- forAll $ pure $ fromJust $ genesisContents ^? J.key "maxLovelaceSupply" . J._Integral
-  actualStartTime     <- forAll $ pure $ fromJust $ genesisContents ^? J.key "systemStart" . J._String <&> T.unpack
-  actualDelegateCount <- forAll $ pure $ fromJust $ genesisContents ^? J.key "genDelegs" . J._Object <&> HMS.size
-  actualTotalSupply   <- forAll $ pure $ sum      $ genesisContents ^.. J.key "initialFunds" . J._Object . CL.to HMS.toList . each . CL._2 . J._Integral
-  actualDelegates     <- forAll $ pure $ fromJust $ genesisContents ^? J.key "genDelegs" . CL.to objectToArray . J._Array
+  actualSupply        <- justResult $ genesisContents ^? J.key "maxLovelaceSupply" . J._Integral
+  actualStartTime     <- justResult $ genesisContents ^? J.key "systemStart" . J._String <&> T.unpack
+  actualDelegateCount <- justResult $ genesisContents ^? J.key "genDelegs" . J._Object <&> HMS.size
+  actualTotalSupply   <- result $ sum $ genesisContents ^.. J.key "initialFunds" . J._Object . CL.to HMS.toList . each . CL._2 . J._Integral
+  actualDelegates     <- justResult $ genesisContents ^? J.key "genDelegs" . CL.to objectToArray . J._Array
 
   actualSupply        === supply
   actualStartTime     === fmtStartTime
