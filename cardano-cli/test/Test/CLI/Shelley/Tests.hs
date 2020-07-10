@@ -9,6 +9,8 @@ module Test.CLI.Shelley.Tests
 
 import           Cardano.Prelude
 
+import           Test.CLI.TextEnvelope.Shelley.Golden.Genesis.Create
+                   (golden_shelleyGenesisCreate)
 import           Test.CLI.Shelley.Golden.TextEnvelope.Certificates.StakeAddressCertificates
                    (golden_shelleyStakeAddressCertificates)
 import           Test.CLI.Shelley.Golden.TextEnvelope.Certificates.MIRCertificate
@@ -44,7 +46,8 @@ keyTests :: IO Bool
 keyTests =
   H.checkSequential
     $ H.Group "TextEnvelope Key Goldens"
-        [ ("golden_shelleyPaymentKeys", golden_shelleyPaymentKeys)
+        [ ("golden_shelleyGenesisCreate", golden_shelleyGenesisCreate)
+        , ("golden_shelleyPaymentKeys", golden_shelleyPaymentKeys)
         , ("golden_shelleyStakeKeys", golden_shelleyStakeKeys)
         , ("golden_shelleyGenesisKeys", golden_shelleyGenesisKeys)
         , ("golden_shelleyGenesisDelegateKeys", golden_shelleyGenesisDelegateKeys)

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings    #-}
 
-module Test.CLI.TextEnvelope.Golden.Genesis.Create
+module Test.CLI.TextEnvelope.Shelley.Golden.Genesis.Create
   ( golden_genesisCreate
   ) where
 
