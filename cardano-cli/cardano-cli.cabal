@@ -174,15 +174,23 @@ test-suite cardano-cli-pioneers
   type:                 exitcode-stdio-1.0
 
   build-depends:        base
+                      , aeson
                       , bech32
                       , cardano-api
                       , cardano-cli
                       , cardano-prelude
+                      , containers
                       , directory
                       , hedgehog
+                      , lens
+                      , lens-aeson
                       , optparse-applicative
+                      , temporary
                       , text
+                      , time
                       , transformers-except
+                      , unordered-containers
+                      , vector
 
   other-modules:        Test.CLI.Byron.Golden.TextEnvelope.PaymentKeys
                         Test.CLI.Byron.Golden.TextEnvelope.Tx
@@ -203,6 +211,8 @@ test-suite cardano-cli-pioneers
                         Test.CLI.Shelley.Golden.TextEnvelope.Tx.Tx
                         Test.CLI.Shelley.Golden.TextEnvelope.Tx.TxBody
                         Test.CLI.Shelley.Golden.TextEnvelope.Tx.Witness
+                        Test.CLI.TextEnvelope.Golden.Genesis.Create
+                        Test.CLI.TextEnvelope.Tests
                         Test.CLI.Shelley.Tests
                         Test.ITN
                         Test.OptParse

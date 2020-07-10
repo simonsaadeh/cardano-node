@@ -6,6 +6,7 @@ import           System.IO (BufferMode (..))
 import qualified System.IO as IO
 
 import qualified Test.CLI.Shelley.Tests
+import qualified Test.CLI.TextEnvelope.Tests
 import qualified Test.ITN
 import qualified Test.Pioneers.Exercise1
 import qualified Test.Pioneers.Exercise2
@@ -21,6 +22,8 @@ main = do
               , Test.CLI.Shelley.Tests.certificateTests
               , Test.CLI.Shelley.Tests.metaDatatests
               , Test.CLI.Shelley.Tests.txTests
+
+              , Test.CLI.TextEnvelope.Tests.cliTests
 
               , Test.Pioneers.Exercise1.tests
               , Test.Pioneers.Exercise2.tests
