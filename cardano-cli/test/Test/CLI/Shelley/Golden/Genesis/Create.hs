@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings    #-}
 
-module Test.CLI.TextEnvelope.Shelley.Golden.Genesis.Create
-  ( golden_genesisCreate
+module Test.CLI.Shelley.Golden.Genesis.Create
+  ( golden_shelleyGenesisCreate
   ) where
 
 import Cardano.Prelude hiding (to)
@@ -63,8 +63,8 @@ justResult Nothing = H.failWith Nothing "Expecting Just, got nothing"
 result :: Show a => a -> H.PropertyT IO a
 result a = H.forAll $ pure a
 
-golden_genesisCreate :: Property
-golden_genesisCreate = OP.propertyOnce $ do
+golden_shelleyGenesisCreate :: Property
+golden_shelleyGenesisCreate = OP.propertyOnce $ do
   liftIO $ IO.createDirectoryIfMissing True "tmp"
   tempDir <- liftIO $ IO.createTempDirectory "tmp" "test"
   let genesisFile = tempDir <> "/genesis.json"

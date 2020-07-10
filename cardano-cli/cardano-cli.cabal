@@ -196,6 +196,7 @@ test-suite cardano-cli-pioneers
                         Test.CLI.Byron.Golden.TextEnvelope.Tx
                         Test.CLI.Byron.Golden.TextEnvelope.TxBody
                         Test.CLI.Byron.Golden.TextEnvelope.Witness
+                        Test.CLI.Shelley.Golden.Genesis.Create
                         Test.CLI.Shelley.Golden.Metadata.StakePoolMetadata
                         Test.CLI.Shelley.Golden.TextEnvelope.Certificates.MIRCertificate
                         Test.CLI.Shelley.Golden.TextEnvelope.Certificates.OperationalCertificate
@@ -211,8 +212,6 @@ test-suite cardano-cli-pioneers
                         Test.CLI.Shelley.Golden.TextEnvelope.Tx.Tx
                         Test.CLI.Shelley.Golden.TextEnvelope.Tx.TxBody
                         Test.CLI.Shelley.Golden.TextEnvelope.Tx.Witness
-                        Test.CLI.TextEnvelope.Golden.Genesis.Create
-                        Test.CLI.TextEnvelope.Tests
                         Test.CLI.Shelley.Tests
                         Test.ITN
                         Test.OptParse

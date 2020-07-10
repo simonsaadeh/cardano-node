@@ -9,7 +9,7 @@ module Test.CLI.Shelley.Tests
 
 import           Cardano.Prelude
 
-import           Test.CLI.TextEnvelope.Shelley.Golden.Genesis.Create
+import           Test.CLI.Shelley.Golden.Genesis.Create
                    (golden_shelleyGenesisCreate)
 import           Test.CLI.Shelley.Golden.TextEnvelope.Certificates.StakeAddressCertificates
                    (golden_shelleyStakeAddressCertificates)
